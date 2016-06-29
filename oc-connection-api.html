@@ -1,0 +1,47 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../iron-ajax/iron-ajax.html">
+<link rel="import" href="../oc-core-utils/oc-api-provider-behaviour.html">
+
+<!--
+`<oc-connection-api>` is used to make requests with Ordercloud's connection api.
+-->
+<dom-module id="oc-connection-api">
+
+  <template>
+    <iron-ajax id="getConnections"></iron-ajax>
+  </template>
+
+  <script>
+    Polymer({
+      is: 'oc-connection-api',
+      behaviors: [OC.Behaviours.ApiProvider],
+
+      /**
+       * Get all the connections for the specified organisation.
+       * @param {Number} organisationId
+       * @param {Object} [criteria]
+       * @param {String} [criteria.sort] - sort results by : fromOrganisation, toOrganisation, type (prepend + for ASC, - for DSC)
+       * @param {String[]} [criteria.statuses=['CONNECTED']] - The connection status (PENDING, CONNECTED, DECLINED)
+       * @param {(Number|String)} [criteria.type] - The connection type, id or code
+       * @param {Number} [criteria.page=1]
+       * @param {Number} [criteria.pageSize=-1]
+       * @param {Boolean} [criteria.showDisabled=false]
+       * @returns {Promise}
+       */
+      getConnections: function(organisationId, criteria) {
+        this.$.getConnections.url = this._url('connections/organisation/' + organisationId + '/status');
+        this.$.getConnections.params = {
+          sort: criteria.sort || '',
+          type: criteria.type || '',
+          page: criteria.page || 1,
+          pagesize: criteria.pageSize || -1,
+          showDisabled: criteria.showDisabled || false,
+          connectionStatus: criteria.statuses || ['CONNECTED']
+        };
+        return this._generateRequest(this.$.getConnections);
+      }
+
+    });
+  </script>
+
+</dom-module>
