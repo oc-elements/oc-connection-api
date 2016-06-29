@@ -21,18 +21,18 @@
        * @param {Number} organisationId
        * @param {Object} [criteria]
        * @param {String} [criteria.sort] - sort results by : fromOrganisation, toOrganisation, type (prepend + for ASC, - for DSC)
-       * @param {String[]} [criteria.statuses=['CONNECTED']] - The connection status (PENDING, CONNECTED, DECLINED)
        * @param {(Number|String)} [criteria.type] - The connection type, id or code
+       * @param {String[]} [criteria.statuses=['CONNECTED']] - The connection status (PENDING, CONNECTED, DECLINED)
        * @param {Number} [criteria.page=1]
-       * @param {Number} [criteria.pageSize=-1]
+       * @param {Number} [criteria.pageSize=20]
        * @param {Boolean} [criteria.showDisabled=false]
        * @returns {Promise}
        */
       getConnections: function(organisationId, criteria) {
         this.$.getConnections.url = this._url('connections/organisation/' + organisationId + '/status');
         this.$.getConnections.params = {
-          sort: criteria.sort || '',
-          type: criteria.type || '',
+          sort: criteria.sort || [],
+          type: criteria.type || [],
           page: criteria.page || 1,
           pagesize: criteria.pageSize || -1,
           showDisabled: criteria.showDisabled || false,
