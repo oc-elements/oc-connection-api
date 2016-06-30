@@ -9,6 +9,9 @@
 
   <template>
     <iron-ajax id="getConnections"></iron-ajax>
+    <iron-ajax id="getConnection"></iron-ajax>
+    <iron-ajax id="getSettings"></iron-ajax>
+    <iron-ajax id="updateSettings" method="put" content-type="application/json"></iron-ajax>
   </template>
 
   <script>
@@ -21,10 +24,10 @@
        * @param {Number} organisationId
        * @param {Object} [criteria]
        * @param {String} [criteria.sort] - sort results by : fromOrganisation, toOrganisation, type (prepend + for ASC, - for DSC)
-       * @param {(Number|String)} [criteria.type] - The connection type, id or code
        * @param {String[]} [criteria.statuses=['CONNECTED']] - The connection status (PENDING, CONNECTED, DECLINED)
+       * @param {(Number|String)} [criteria.type] - The connection type, id or code
        * @param {Number} [criteria.page=1]
-       * @param {Number} [criteria.pageSize=20]
+       * @param {Number} [criteria.pageSize=-1]
        * @param {Boolean} [criteria.showDisabled=false]
        * @returns {Promise}
        */
@@ -39,6 +42,40 @@
           connectionStatus: criteria.statuses || ['CONNECTED']
         };
         return this._generateRequest(this.$.getConnections);
+      },
+
+      /**
+       * Get connection
+       * @param {Number} id
+       * @returns {Promise}
+       */
+      getConnection: function(id) {
+        this.$.getConnection.url = this._url('connections/' + id);
+        return this._generateRequest(this.$.getConnection);
+      },
+
+      /**
+       * Get connection settings
+       * @param {Number} id
+       * @returns {Promise}
+       */
+      getSettings: function(id) {
+        this.$.getSettings.url = this._url('connections/' + id + '/settings');
+        return this._generateRequest(this.$.getSettings);
+      },
+
+      /**
+       * Update connection settings
+       * @param {Number} id
+       * @param {Object[]} settings
+       * @param {String} settings[].value
+       * @param {String} settings[].settingKeyId
+       * @returns {Promise}
+       */
+      updateSettings: function(id, settings) {
+        this.$.updateSettings.url = this._url('connections/' + id + '/settings');
+        this.$.updateSettings.body = settings;
+        return this._generateRequest(this.$.updateSettings);
       }
 
     });
