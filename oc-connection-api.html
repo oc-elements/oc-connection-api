@@ -11,6 +11,7 @@
     <iron-ajax id="getConnections"></iron-ajax>
     <iron-ajax id="getConnection"></iron-ajax>
     <iron-ajax id="getSettings"></iron-ajax>
+    <iron-ajax id="getConnetionType"></iron-ajax>
     <iron-ajax id="updateSettings" method="put" content-type="application/json"></iron-ajax>
   </template>
 
@@ -52,6 +53,16 @@
       getConnection: function(id) {
         this.$.getConnection.url = this._url('connections/' + id);
         return this._generateRequest(this.$.getConnection);
+      },
+
+        /**
+       * Get connection
+       * @param {Number} id
+       * @returns {Promise}
+       */
+      getConnectionsByType: function(id, typeCodeId) {
+        this.$.getConnectionType.url = this._url('connections/'+ id +'organisations/connections/type/'+typeCodeId);
+        return this._generateRequest(this.$.getConnectionType);
       },
 
       /**
