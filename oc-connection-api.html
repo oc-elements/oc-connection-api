@@ -5,8 +5,10 @@
 <dom-module id="oc-connection-api">
 
     <template>
+        <iron-ajax id="createConnection"></iron-ajax>
         <iron-ajax id="getConnections"></iron-ajax>
         <iron-ajax id="getConnection"></iron-ajax>
+        <iron-ajax id="getPossibleConnections"></iron-ajax>
         <iron-ajax id="getSettings"></iron-ajax>
         <iron-ajax id="getConnetionType"></iron-ajax>
         <iron-ajax id="updateSettings" method="put" content-type="application/json"></iron-ajax>
@@ -19,6 +21,19 @@
 			}
 
 			static get behaviours() {
+			}
+
+			createConnection(toOrganisation, fromOrganisation, typeCode) {
+				this.$.createConnection.url = this._generateUrl('connections');
+				this.$.createConnection.method = "POST";
+				this.$.createConnection.contentType = "application/json";
+				this.$.createConnection.body = {
+					toOrganisationId: toOrganisation,
+					fromOrganisationId: fromOrganisation,
+					typeCode: typeCode || "M"
+				};
+
+				return this._generateRequest(this.$.createConnection);
 			}
 
 			/**
@@ -54,6 +69,15 @@
 			getConnection(id) {
 				this.$.getConnection.url = this._generateUrl('connections/' + id);
 				return this._generateRequest(this.$.getConnection);
+			}
+
+			/**
+			 * Get possible connections
+			 * @returns {Promise}
+			 */
+			getPossibleConnections() {
+				this.$.getPossibleConnections.url = this._generateUrl('connections/possible?connectionType=2');
+				return this._generateRequest(this.$.getPossibleConnections);
 			}
 
 			/**
