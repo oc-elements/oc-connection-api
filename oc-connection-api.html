@@ -6,6 +6,7 @@
 
     <template>
         <iron-ajax id="createConnection"></iron-ajax>
+        <iron-ajax id="acceptConnection" method="put" content-type="application/json"></iron-ajax>
         <iron-ajax id="getConnections"></iron-ajax>
         <iron-ajax id="getConnection"></iron-ajax>
         <iron-ajax id="getPossibleConnections"></iron-ajax>
@@ -34,6 +35,11 @@
 				};
 
 				return this._generateRequest(this.$.createConnection);
+			}
+
+			acceptConnection(connectionId, organisationId) {
+				this.$.acceptConnection.url = this._generateUrl(`connections/${connectionId}/organisation/${organisationId}/accept`);
+				return this._generateRequest(this.$.acceptConnection)
 			}
 
 			/**
