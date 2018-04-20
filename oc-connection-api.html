@@ -13,6 +13,7 @@
         <iron-ajax id="getSettings"></iron-ajax>
         <iron-ajax id="getConnetionType"></iron-ajax>
         <iron-ajax id="updateSettings" method="put" content-type="application/json"></iron-ajax>
+        <iron-ajax id="disableConnection" method="put" content-type="application/json"></iron-ajax>
     </template>
 
     <script>
@@ -75,6 +76,16 @@
 			getConnection(id) {
 				this.$.getConnection.url = this._generateUrl('connections/' + id);
 				return this._generateRequest(this.$.getConnection);
+			}
+
+			/**
+			 * Disable connection
+			 * @param {Number} iid
+			 * @returns {Promise}
+			 */
+			disableConnection(id) {
+				this.$.disableConnection.url = this._generateUrl(`connections/${id}/disable`);
+				return this._generateRequest(this.$.disableConnection);
 			}
 
 			/**
