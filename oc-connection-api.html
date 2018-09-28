@@ -4,19 +4,20 @@
 
 <dom-module id="oc-connection-api">
 
-    <template>
-        <iron-ajax id="createConnection"></iron-ajax>
-        <iron-ajax id="acceptConnection" method="put" content-type="application/json"></iron-ajax>
-        <iron-ajax id="getConnections"></iron-ajax>
-        <iron-ajax id="getConnection"></iron-ajax>
-        <iron-ajax id="getPossibleConnections"></iron-ajax>
-        <iron-ajax id="getSettings"></iron-ajax>
-        <iron-ajax id="getConnetionType"></iron-ajax>
-        <iron-ajax id="updateSettings" method="put" content-type="application/json"></iron-ajax>
-        <iron-ajax id="disableConnection" method="put" content-type="application/json"></iron-ajax>
-    </template>
+	<template>
+		<iron-ajax id="createConnection"></iron-ajax>
+		<iron-ajax id="acceptConnection" method="put" content-type="application/json"></iron-ajax>
+		<iron-ajax id="declineConnection" method="put" content-type="application/json"></iron-ajax>
+		<iron-ajax id="getConnections"></iron-ajax>
+		<iron-ajax id="getConnection"></iron-ajax>
+		<iron-ajax id="getPossibleConnections"></iron-ajax>
+		<iron-ajax id="getSettings"></iron-ajax>
+		<iron-ajax id="getConnetionType"></iron-ajax>
+		<iron-ajax id="updateSettings" method="put" content-type="application/json"></iron-ajax>
+		<iron-ajax id="disableConnection" method="put" content-type="application/json"></iron-ajax>
+	</template>
 
-    <script>
+	<script>
 		class OcConnectionApi extends Ordercloud.ApiMixin(Polymer.Element) {
 			static get is() {
 				return 'oc-connection-api';
@@ -41,6 +42,11 @@
 			acceptConnection(connectionId, organisationId) {
 				this.$.acceptConnection.url = this._generateUrl(`connections/${connectionId}/organisation/${organisationId}/accept`);
 				return this._generateRequest(this.$.acceptConnection)
+			}
+
+			declineConnection(connectionId, organisationId) {
+				this.$.declineConnection.url = this._generateUrl(`connections/${connectionId}/organisation/${organisationId}/decline`);
+				return this._generateRequest(this.$.declineConnection)
 			}
 
 			/**
@@ -133,6 +139,6 @@
 		}
 
 		window.customElements.define(OcConnectionApi.is, OcConnectionApi);
-    </script>
+	</script>
 
 </dom-module>
