@@ -5,7 +5,11 @@
 <dom-module id="oc-connection-api">>
     <template>
         <iron-ajax id="getOrganisationConnections"></iron-ajax>
+        <iron-ajax id="getAllOrganisationConnections"></iron-ajax>
         <iron-ajax id="requestConnection"></iron-ajax>
+        <iron-ajax id="removeConnection"></iron-ajax>
+        <iron-ajax id="acceptConnection"></iron-ajax>
+        <iron-ajax id="declineConnection"></iron-ajax>
         <iron-ajax id="getPendingOrganisationConnections"></iron-ajax>
     </template>
 
@@ -28,24 +32,55 @@
              * @return {Promise}
              */
             
-             getOrganisationConnections(organisationId) {
-                this.$.getOrganisationConnections.url = this._generateUrl('organisations/' + organisationId + '/connections?pagesize=-1');
-                this.$.getOrganisationConnections.method = 'GET';
-                this.$.getOrganisationConnections.contentType = 'application/json';
-                return this._generateRequest(this.$.getOrganisationConnections);
+             getAllOrganisationConnections(organisationId) {
+                this.$.getAllOrganisationConnections.url = this._generateUrl('organisations/' + organisationId + '/connections?pagesize=-1');
+                this.$.getAllOrganisationConnections.method = 'GET';
+				this.$.getAllOrganisationConnections.contentType = 'application/json';
+				return this._generateRequest(this.$.getAllOrganisationConnections);
             }
+
+            getOrganisationConnections(organisationId, criteria) {
+				this.$.getOrganisationConnections.url = this._generateUrl('organisations/' + organisationId + '/connections');
+				this.$.getOrganisationConnections.params = {
+					'page': (!criteria.page) ? -1 : criteria.page,
+					'pagesize': criteria.pageSize || 20,
+					'status': criteria.connectionStatus || [],
+					'sort': criteria.sort || '+',
+                    'showDisabled': criteria.showDisabled,
+                    
+				};
+				return this._generateRequest(this.$.getOrganisationConnections);
+			}
             getPendingOrganisationConnections(organisationId) {
                 this.$.getOrganisationConnections.url = this._generateUrl('organisations/' + organisationId + '/connections?status=PENDING&pagesize=-1');
                 this.$.getOrganisationConnections.method = 'GET';
-                this.$.getOrganisationConnections.contentType = 'application/json';
-                return this._generateRequest(this.$.getOrganisationConnections);
+				this.$.getOrganisationConnections.contentType = 'application/json';
+				return this._generateRequest(this.$.getOrganisationConnections);
             }
             requestConnection(organisationId, requestDetails) {
                 this.$.requestConnection.url = this._generateUrl('organisations/' + organisationId + '/connections');
                 this.$.requestConnection.method = 'POST';
                 this.$.requestConnection.body = requestDetails;
-                this.$.requestConnection.contentType = 'application/json';
-                return this._generateRequest(this.$.requestConnection);
+				this.$.requestConnection.contentType = 'application/json';
+				return this._generateRequest(this.$.requestConnection);
+            }
+            removeConnection(connectionId){
+                this.$.removeConnection.url = this._generateUrl('connections/' + connectionId);
+                this.$.removeConnection.method = 'DELETE';
+				this.$.removeConnection.contentType = 'application/json';
+				return this._generateRequest(this.$.removeConnection);
+            }
+            acceptConnection(connectionId, organisationId){
+                this.$.acceptConnection.url = this._generateUrl('connections/' + connectionId + '/organisation/' + organisationId + '/accept');
+                this.$.acceptConnection.method = 'PUT';
+				this.$.acceptConnection.contentType = 'application/json';
+				return this._generateRequest(this.$.acceptConnection);
+            }
+            declineConnection(connectionId, organisationId){
+                this.$.declineConnection.url = this._generateUrl('connections/' + connectionId + '/organisation/' + organisationId + '/decline');
+                this.$.declineConnection.method = 'PUT';
+				this.$.declineConnection.contentType = 'application/json';
+				return this._generateRequest(this.$.declineConnection);
             }
         }
 
