@@ -7,6 +7,8 @@
         <iron-ajax id="getOrganisationConnections"></iron-ajax>
         <iron-ajax id="getAllOrganisationConnections"></iron-ajax>
         <iron-ajax id="requestConnection"></iron-ajax>
+        <iron-ajax id="enableConnection"></iron-ajax>
+        <iron-ajax id="disableConnection"></iron-ajax>
         <iron-ajax id="removeConnection"></iron-ajax>
         <iron-ajax id="acceptConnection"></iron-ajax>
         <iron-ajax id="declineConnection"></iron-ajax>
@@ -69,6 +71,19 @@
                 this.$.removeConnection.method = 'DELETE';
 				this.$.removeConnection.contentType = 'application/json';
 				return this._generateRequest(this.$.removeConnection);
+            }
+            enableConnection(connectionId){
+                this.$.enableConnection.url = this._generateUrl('connections/' + connectionId + '/enable');
+                this.$.enableConnection.method = 'PUT';
+				this.$.enableConnection.contentType = 'application/json';
+				return this._generateRequest(this.$.enableConnection);
+            }
+
+            disableConnection(connectionId){
+                this.$.disableConnection.url = this._generateUrl('connections/' + connectionId + '/disable');
+                this.$.disableConnection.method = 'PUT';
+				this.$.disableConnection.contentType = 'application/json';
+				return this._generateRequest(this.$.disableConnection);
             }
             acceptConnection(connectionId, organisationId){
                 this.$.acceptConnection.url = this._generateUrl('connections/' + connectionId + '/organisation/' + organisationId + '/accept');
